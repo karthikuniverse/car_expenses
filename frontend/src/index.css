@@ -42,8 +42,20 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Ant Design Form Overrides for Premium Compact Spacing */
+.ant-form-item-label {
+  padding-bottom: 4px !important;
+}
+
+.ant-form-item-label>label {
+  font-weight: 600 !important;
+  color: #334155 !important;
+  font-size: 0.875rem !important;
 }

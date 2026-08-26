@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Input, Button, Checkbox, message, Typography } from 'antd';
+import { Form, Checkbox, message, Typography } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useLoginMutation } from '../../services/authApi';
 import { useSetAtom } from 'jotai';
 import { tokenAtom, userAtom } from '../../store/atoms';
 import type { LoginPayload } from '../../types/auth';
+import { FormInput } from '../../components/form/FormInput';
+import { FormButton } from '../../components/form/FormButton';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 export const LoginPage: React.FC = () => {
   const [login, { isLoading }] = useLoginMutation();
@@ -32,9 +34,9 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="text-center">
-        <Title level={3} className="text-slate-800 font-extrabold m-0">Sign In</Title>
+        {/* <Title level={3} className="text-slate-800 font-extrabold !m-0 !mb-1">Sign In</Title> */}
         <Text className="text-slate-400 text-sm">Enter your credentials to access your account</Text>
       </div>
 
@@ -43,33 +45,30 @@ export const LoginPage: React.FC = () => {
         initialValues={{ remember: true }}
         onFinish={onFinish}
         layout="vertical"
-        size="large"
-        className="space-y-4"
+        size="middle"
+        className="space-y-3.5"
       >
-        <Form.Item
+        <FormInput
           name="email"
+          label="Email Address"
+          size="middle"
+          placeholder="Enter your email address"
+          prefix={<MailOutlined className="text-slate-300 mr-2" />}
           rules={[
             { required: true, message: 'Please enter your email' },
             { type: 'email', message: 'Please enter a valid email address' }
           ]}
-        >
-          <Input
-            prefix={<MailOutlined className="text-slate-300 mr-2" />}
-            placeholder="Email Address"
-            className="hover:border-indigo-400 focus:border-indigo-500 rounded-lg"
-          />
-        </Form.Item>
+        />
 
-        <Form.Item
+        <FormInput
           name="password"
+          label="Password"
+          type="password"
+          size="middle"
+          placeholder="Enter your password"
+          prefix={<LockOutlined className="text-slate-300 mr-2" />}
           rules={[{ required: true, message: 'Please enter your password' }]}
-        >
-          <Input.Password
-            prefix={<LockOutlined className="text-slate-300 mr-2" />}
-            placeholder="Password"
-            className="hover:border-indigo-400 focus:border-indigo-500 rounded-lg"
-          />
-        </Form.Item>
+        />
 
         <div className="flex items-center justify-between text-sm">
           <Form.Item name="remember" valuePropName="checked" noStyle>
@@ -80,19 +79,19 @@ export const LoginPage: React.FC = () => {
           </a>
         </div>
 
-        <Form.Item className="m-0">
-          <Button
+        <Form.Item className="!mb-0">
+          <FormButton
             type="primary"
             htmlType="submit"
+            size="middle"
             loading={isLoading}
-            className="w-full h-12 text-base font-semibold rounded-lg"
           >
             Sign In
-          </Button>
+          </FormButton>
         </Form.Item>
       </Form>
 
-      <div className="text-center text-sm text-slate-500 pt-2 border-t border-slate-100">
+      <div className="text-center text-sm text-slate-500 pt-3 border-t border-slate-100">
         Don't have an account?{' '}
         <Link to="/register" className="text-indigo-600 hover:text-indigo-500 font-semibold">
           Create account
