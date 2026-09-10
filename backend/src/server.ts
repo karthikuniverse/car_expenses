@@ -5,6 +5,8 @@ import morgan from 'morgan';
 import connectDB from './config/db';
 import carExpenseRoutes from './routes/carExpenseRoutes';
 import authRoutes from './routes/authRoutes';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerDocument } from './docs/swagger';
 import { errorHandler } from './middlewares/errorMiddleware';
 
 // Load env variables
@@ -25,6 +27,9 @@ app.use(cors());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Swagger API Documentation UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {

@@ -5,6 +5,7 @@ import { Provider as JotaiProvider } from 'jotai';
 import { ConfigProvider, App as AntApp } from 'antd';
 import { store } from './store';
 import { AppRoutes } from './routes/AppRoutes';
+import { TopLoadingBar } from './components/common/TopLoadingBar';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           }}
         >
           <AntApp>
+            <TopLoadingBar />
             <BrowserRouter>
               <AppRoutes />
             </BrowserRouter>
