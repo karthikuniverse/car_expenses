@@ -4,6 +4,7 @@ import cors from 'cors';
 import morgan from 'morgan';
 import connectDB from './config/db';
 import authRoutes from './routes/authRoutes';
+import tripRoutes from './routes/tripRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerDocument } from './docs/swagger';
 import { errorHandler } from './middlewares/errorMiddleware';
@@ -32,6 +33,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Mounting routes
 app.use('/api/auth', authRoutes);
+app.use('/api/trips', tripRoutes);
 
 // Central error handler
 app.use(errorHandler);
