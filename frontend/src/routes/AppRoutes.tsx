@@ -4,6 +4,9 @@ import { ProtectedRoute } from './ProtectedRoute';
 import { PublicRoute } from './PublicRoute';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { DashboardPage } from '../pages/dashboard/DashboardPage';
+import { TripsPage } from '../pages/trips/TripsPage';
+import { CustomersPage } from '../pages/customers/CustomersPage';
+import { ExpensesPage } from '../pages/expenses/ExpensesPage';
 import { AuthLayout } from '../components/layout/AuthLayout';
 import { DashboardLayout } from '../components/layout/DashboardLayout';
 import { RegisterPage } from '../pages/auth/RegisterPage';
@@ -25,6 +28,9 @@ export const AppRoutes: React.FC = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<DashboardLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/trips" element={<TripsPage />} />
+          <Route path="/customers" element={<CustomersPage />} />
+          <Route path="/expenses" element={<ExpensesPage />} />
         </Route>
       </Route>
 

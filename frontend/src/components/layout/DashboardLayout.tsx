@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useAtom, useSetAtom } from 'jotai';
 import { userAtom, tokenAtom } from '../../store/atoms';
 import { useGetMeQuery } from '../../services/authApi';
-import { Layout, Menu, Button, Avatar, Dropdown, Spin } from 'antd';
-import { CarOutlined, LogoutOutlined, UserOutlined, DashboardOutlined, DollarOutlined } from '@ant-design/icons';
+import { Layout, Menu, Avatar, Dropdown, Spin, Tag } from 'antd';
+import {
+  CarOutlined,
+  LogoutOutlined,
+  UserOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import { showSuccess, showError } from '../../utils/notification';
+import { sidebarMenuItems } from '../../config/navigation';
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,9 +19,10 @@ export const DashboardLayout: React.FC = () => {
   const [user, setUser] = useAtom(userAtom);
   const setToken = useSetAtom(tokenAtom);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Fetch current user details on component mount if user atom is empty
-  const { data: meData, error, isLoading, isError } = useGetMeQuery(undefined, {
+  const { data: meData, isLoading, isError } = useGetMeQuery(undefined, {
     skip: !localStorage.getItem('token'),
   });
 
@@ -43,6 +50,37 @@ export const DashboardLayout: React.FC = () => {
     navigate('/login');
   };
 
+  // Determine current active key from route path
+  const currentKey =
+    sidebarMenuItems.find((item) =>
+      item.path === '/dashboard'
+        ? location.pathname === '/dashboard'
+        : location.pathname.startsWith(item.path)
+    )?.key || 'dashboard';
+
+  const userMenuItems = [
+    {
+      key: 'user-info',
+      label: (
+        <div className="px-3 py-2 border-b border-slate-100 min-w-[180px]">
+          <p className="font-bold text-slate-800 m-0 text-sm">{user?.name}</p>
+          <p className="text-xs text-slate-400 m-0 truncate">{user?.email}</p>
+          <div className="mt-1.5">
+            <Tag color="indigo" className="!text-[10px] uppercase font-semibold !m-0">
+              {user?.role || 'User'}
+            </Tag>
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'logout',
+      icon: <LogoutOutlined className="text-rose-500" />,
+      label: <span className="text-rose-600 font-medium">Log out</span>,
+      onClick: handleLogout,
+    },
+  ];
+
   if (isLoading && !user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -51,71 +89,96 @@ export const DashboardLayout: React.FC = () => {
     );
   }
 
-  const userMenuItems = [
-    {
-      key: 'profile',
-      label: (
-        <div className="px-4 py-2 border-b border-slate-100">
-          <p className="font-semibold text-slate-800 m-0">{user?.name}</p>
-          <p className="text-xs text-slate-500 m-0 capitalize">{user?.role}</p>
-        </div>
-      ),
-    },
-    {
-      key: 'logout',
-      icon: <LogoutOutlined />,
-      label: 'Logout',
-      onClick: handleLogout,
-    },
-  ];
-
   return (
-    <Layout className="min-h-screen">
-      <Header className="bg-white border-b border-slate-100 px-6 flex items-center justify-between sticky top-0 z-50">
-        <div className="flex items-center gap-3">
-          <span className="p-2 bg-indigo-50 rounded-lg flex items-center justify-center">
-            <CarOutlined className="text-indigo-600 text-xl" />
+    <Layout style={{ minHeight: '100vh', background: '#f8fafc' }}>
+      {/* Top Header */}
+      <Header
+        style={{
+          background: '#ffffff',
+          borderBottom: '1px solid #e2e8f0',
+          padding: '0 24px',
+          height: '64px',
+          lineHeight: '64px',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        {/* Left Side: Brand Logo & Title */}
+        <div
+          className="flex items-center gap-3 cursor-pointer"
+          onClick={() => navigate('/dashboard')}
+        >
+          <div className="w-10 h-10 bg-gradient-to-tr from-indigo-600 to-blue-500 rounded-xl flex items-center justify-center text-white shadow-sm">
+            <CarOutlined className="text-xl" />
+          </div>
+          <span className="text-xl font-extrabold tracking-tight text-slate-800">
+            Car Expenses
           </span>
-          <span className="text-xl font-bold tracking-tight text-slate-800">CarExpenses</span>
         </div>
-        
-        <div className="flex items-center gap-4">
-          <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
-            <div className="flex items-center gap-3 cursor-pointer p-1.5 hover:bg-slate-50 rounded-lg transition-colors">
-              <Avatar icon={<UserOutlined />} className="bg-indigo-600" />
-              <div className="hidden md:block text-left">
-                <p className="text-sm font-semibold text-slate-700 m-0 leading-tight">{user?.name}</p>
-                <p className="text-xs text-slate-400 m-0 leading-none capitalize">{user?.role}</p>
-              </div>
+
+        {/* Right Side: Current Logged In User Info */}
+        <Dropdown menu={{ items: userMenuItems }} trigger={['click']} placement="bottomRight">
+          <div className="flex items-center gap-3 cursor-pointer py-1.5 px-3 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 transition-all">
+            <Avatar
+              size={38}
+              className="bg-indigo-600 text-white font-bold flex items-center justify-center shadow-sm"
+            >
+              {user?.name ? user.name.charAt(0).toUpperCase() : <UserOutlined />}
+            </Avatar>
+            <div className="hidden sm:flex flex-col text-left">
+              <span className="text-sm font-bold text-slate-800 leading-tight">
+                {user?.name || 'User'}
+              </span>
+              <span className="text-[11px] font-semibold text-indigo-600 uppercase tracking-wider leading-tight">
+                {user?.role || 'Admin'}
+              </span>
             </div>
-          </Dropdown>
-        </div>
+            <DownOutlined className="text-[10px] text-slate-400 ml-1 hidden sm:inline-block" />
+          </div>
+        </Dropdown>
       </Header>
-      
-      <Layout>
-        <Sider width={240} className="bg-white border-r border-slate-100 hidden md:block" trigger={null} collapsible={false}>
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={['dashboard']}
-            className="h-full border-r-0 pt-4"
-            items={[
-              {
-                key: 'dashboard',
-                icon: <DashboardOutlined />,
-                label: 'Dashboard',
-              },
-              {
-                key: 'expenses',
-                icon: <DollarOutlined />,
-                label: 'Expenses',
-                disabled: true,
-              },
-            ]}
-          />
+
+      <Layout style={{ minHeight: 'calc(100vh - 64px)', background: '#f8fafc' }}>
+        {/* Sidebar Menu Loaded from Config */}
+        <Sider
+          width={240}
+          style={{
+            background: '#ffffff',
+            borderRight: '1px solid #e2e8f0',
+            minHeight: 'calc(100vh - 64px)',
+          }}
+          className="hidden md:block shadow-sm"
+          trigger={null}
+          collapsible={false}
+        >
+          <div className="p-3 sticky top-[64px]">
+            <Menu
+              mode="inline"
+              selectedKeys={[currentKey]}
+              onClick={({ key }) => {
+                const navItem = sidebarMenuItems.find((item) => item.key === key);
+                if (navItem) {
+                  navigate(navItem.path);
+                }
+              }}
+              className="!border-none space-y-1"
+              items={sidebarMenuItems.map((item) => ({
+                key: item.key,
+                icon: item.icon,
+                label: <span className="font-semibold text-sm">{item.label}</span>,
+                className: '!rounded-lg !my-1',
+              }))}
+            />
+          </div>
         </Sider>
-        
-        <Layout className="p-6 bg-slate-50">
-          <Content className="m-0 min-h-[280px]">
+
+        {/* Main Content Area */}
+        <Layout className="p-4 md:p-8 bg-slate-50" style={{ minHeight: 'calc(100vh - 64px)' }}>
+          <Content className="m-0 flex-1 min-h-full">
             <Outlet />
           </Content>
         </Layout>
@@ -123,3 +186,4 @@ export const DashboardLayout: React.FC = () => {
     </Layout>
   );
 };
+
