@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import { Provider as JotaiProvider } from 'jotai';
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, App as AntApp } from 'antd';
 import { store } from './store';
 import { AppRoutes } from './routes/AppRoutes';
 
@@ -23,9 +23,11 @@ function App() {
             },
           }}
         >
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
+          <AntApp>
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </AntApp>
         </ConfigProvider>
       </JotaiProvider>
     </ReduxProvider>

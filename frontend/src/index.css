@@ -59,3 +59,94 @@ body {
   color: #334155 !important;
   font-size: 0.875rem !important;
 }
+
+/* Global Top-Right Message & Toast Positioning */
+.ant-message {
+  position: fixed !important;
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  width: auto !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+}
+
+.ant-message-notice {
+  text-align: right !important;
+  padding: 3px 0 !important;
+}
+
+.ant-message-notice-content {
+  display: inline-flex !important;
+  align-items: center !important;
+  padding: 8px 14px !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid rgba(226, 232, 240, 0.8) !important;
+  font-weight: 500 !important;
+  font-size: 0.8125rem !important;
+  color: #1e293b !important;
+  pointer-events: all !important;
+}
+
+/* Compact Ant Design Notification Styling - Fully Visible & Clean */
+.ant-notification {
+  z-index: 99999 !important;
+}
+
+.ant-notification-topRight,
+.ant-notification-top-right {
+  top: 20px !important;
+  right: 20px !important;
+}
+
+.ant-notification-notice {
+  width: 330px !important;
+  max-width: calc(100vw - 40px) !important;
+  padding: 12px 14px !important;
+  margin-bottom: 10px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 6px 10px -4px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid #e2e8f0 !important;
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+
+.ant-notification-notice-icon {
+  font-size: 18px !important;
+  margin-right: 10px !important;
+  margin-top: 1px !important;
+  line-height: 1 !important;
+}
+
+.ant-notification-notice-message {
+  font-size: 0.875rem !important; /* ~14px */
+  font-weight: 600 !important;
+  color: #1e293b !important;
+  margin-bottom: 2px !important;
+  line-height: 1.35 !important;
+  padding-right: 20px !important;
+}
+
+.ant-notification-notice-description {
+  font-size: 0.8rem !important; /* ~12.8px */
+  color: #64748b !important;
+  line-height: 1.4 !important;
+  margin-top: 2px !important;
+  padding-right: 16px !important;
+}
+
+.ant-notification-notice-close {
+  top: 10px !important;
+  right: 12px !important;
+  color: #94a3b8 !important;
+  font-size: 13px !important;
+}
+
+.ant-notification-notice-close:hover {
+  color: #334155 !important;
+}

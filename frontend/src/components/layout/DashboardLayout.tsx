@@ -3,8 +3,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useAtom, useSetAtom } from 'jotai';
 import { userAtom, tokenAtom } from '../../store/atoms';
 import { useGetMeQuery } from '../../services/authApi';
-import { Layout, Menu, Button, Avatar, Dropdown, message, Spin } from 'antd';
+import { Layout, Menu, Button, Avatar, Dropdown, Spin } from 'antd';
 import { CarOutlined, LogoutOutlined, UserOutlined, DashboardOutlined, DollarOutlined } from '@ant-design/icons';
+import { showSuccess, showError } from '../../utils/notification';
 
 const { Header, Content, Sider } = Layout;
 
@@ -26,7 +27,7 @@ export const DashboardLayout: React.FC = () => {
 
   useEffect(() => {
     if (isError) {
-      message.error('Session expired, please login again.');
+      showError('Session Expired', 'Please login again.');
       setToken(null);
       setUser(null);
       localStorage.removeItem('token');
@@ -38,7 +39,7 @@ export const DashboardLayout: React.FC = () => {
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
-    message.success('Logged out successfully');
+    showSuccess('Logged Out', 'You have been successfully logged out.');
     navigate('/login');
   };
 

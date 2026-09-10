@@ -1,5 +1,14 @@
 import { apiSlice } from './apiSlice';
-import type { AuthResponse, LoginPayload, RegisterPayload, MeResponse } from '../types/auth';
+import type {
+  AuthResponse,
+  LoginPayload,
+  RegisterPayload,
+  MeResponse,
+  VerifyEmailPayload,
+  VerifyEmailResponse,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
+} from '../types/auth';
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -23,7 +32,28 @@ export const authApi = apiSlice.injectEndpoints({
       query: () => '/auth/me',
       providesTags: ['User'],
     }),
+    verifyEmail: builder.mutation<VerifyEmailResponse, VerifyEmailPayload>({
+      query: (payload) => ({
+        url: '/auth/verify-email',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
+    resetPassword: builder.mutation<ResetPasswordResponse, ResetPasswordPayload>({
+      query: (payload) => ({
+        url: '/auth/reset-password',
+        method: 'POST',
+        body: payload,
+      }),
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useGetMeQuery } = authApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGetMeQuery,
+  useVerifyEmailMutation,
+  useResetPasswordMutation,
+} = authApi;
+

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, Checkbox, message, Typography } from 'antd';
+import { Form, Checkbox, Typography } from 'antd';
 import { MailOutlined, LockOutlined } from '@ant-design/icons';
 import { useLoginMutation } from '../../services/authApi';
 import { useSetAtom } from 'jotai';
@@ -8,6 +8,7 @@ import { tokenAtom, userAtom } from '../../store/atoms';
 import type { LoginPayload } from '../../types/auth';
 import { FormInput } from '../../components/form/FormInput';
 import { FormButton } from '../../components/form/FormButton';
+import { showSuccess, showError } from '../../utils/notification';
 
 const { Text } = Typography;
 
@@ -24,12 +25,12 @@ export const LoginPage: React.FC = () => {
         localStorage.setItem('token', response.token);
         setToken(response.token);
         setUser(response.user);
-        message.success('Welcome back!');
+        showSuccess('Welcome back!', `Logged in as ${response.user.name}`);
         navigate('/dashboard');
       }
     } catch (err: any) {
       const errorMsg = err?.data?.error || 'Login failed. Please check your credentials.';
-      message.error(errorMsg);
+      showError('Authentication Failed', errorMsg);
     }
   };
 
@@ -74,9 +75,9 @@ export const LoginPage: React.FC = () => {
           <Form.Item name="remember" valuePropName="checked" noStyle>
             <Checkbox className="text-slate-500">Remember me</Checkbox>
           </Form.Item>
-          <a className="text-indigo-600 hover:text-indigo-500 font-semibold" href="#forgot">
+          <Link to="/forgot-password" className="text-indigo-600 hover:text-indigo-500 font-semibold">
             Forgot password?
-          </a>
+          </Link>
         </div>
 
         <Form.Item className="!mb-0">

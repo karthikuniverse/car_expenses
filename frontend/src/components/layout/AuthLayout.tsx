@@ -1,7 +1,5 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { CarOutlined } from '@ant-design/icons';
-
 export const AuthLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-slate-100/80 to-indigo-50/40 p-4 md:p-8 relative overflow-hidden">

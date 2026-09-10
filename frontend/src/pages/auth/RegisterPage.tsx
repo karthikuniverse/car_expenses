@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Form, message, Typography } from 'antd';
+import { Form, Typography } from 'antd';
 import { UserOutlined, PhoneOutlined, MailOutlined, LockOutlined, CarOutlined } from '@ant-design/icons';
 import { useRegisterMutation } from '../../services/authApi';
 import { useSetAtom } from 'jotai';
@@ -8,6 +8,7 @@ import { tokenAtom, userAtom } from '../../store/atoms';
 import type { RegisterPayload } from '../../types/auth';
 import { FormInput } from '../../components/form/FormInput';
 import { FormButton } from '../../components/form/FormButton';
+import { showSuccess, showError } from '../../utils/notification';
 
 const { Title, Text } = Typography;
 
@@ -34,12 +35,12 @@ export const RegisterPage: React.FC = () => {
         localStorage.setItem('token', response.token);
         setToken(response.token);
         setUser(response.user);
-        message.success('Account created successfully!');
+        showSuccess('Account Created!', `Welcome, ${response.user.name}!`);
         navigate('/dashboard');
       }
     } catch (err: any) {
       const errorMsg = err?.data?.error || 'Registration failed. Please check details.';
-      message.error(errorMsg);
+      showError('Registration Failed', errorMsg);
     }
   };
 
