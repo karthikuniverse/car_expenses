@@ -1,9 +1,9 @@
 export const swaggerDocument = {
   openapi: '3.0.0',
   info: {
-    title: 'Car Expenses Tracker API',
+    title: 'Car Expenses Auth API',
     version: '1.0.0',
-    description: 'RESTful API documentation for Car Expenses Tracking & Management system.',
+    description: 'RESTful API documentation for Authentication & User Management.',
     contact: {
       name: 'CarExpenses Support',
     },
@@ -37,19 +37,6 @@ export const swaggerDocument = {
           created_at: { type: 'string', format: 'date-time' },
         },
       },
-      Expense: {
-        type: 'object',
-        properties: {
-          _id: { type: 'string', example: '663f79a31a8c9b001efc5678' },
-          title: { type: 'string', example: 'Fuel Refill' },
-          amount: { type: 'number', example: 2500 },
-          category: { type: 'string', example: 'Fuel' },
-          date: { type: 'string', format: 'date-time', example: '2026-09-10T00:00:00.000Z' },
-          notes: { type: 'string', example: 'Filled petrol at Shell bunk' },
-          createdAt: { type: 'string', format: 'date-time' },
-          updatedAt: { type: 'string', format: 'date-time' },
-        },
-      },
       ErrorResponse: {
         type: 'object',
         properties: {
@@ -60,29 +47,6 @@ export const swaggerDocument = {
     },
   },
   paths: {
-    '/health': {
-      get: {
-        summary: 'Health Check',
-        tags: ['System'],
-        description: 'Verify if the API server is up and running.',
-        responses: {
-          200: {
-            description: 'API is running successfully',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    status: { type: 'string', example: 'ok' },
-                    message: { type: 'string', example: 'Car Expenses API is running (TS)' },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
     '/api/auth/register': {
       post: {
         summary: 'Register User',
@@ -295,197 +259,6 @@ export const swaggerDocument = {
           },
           401: {
             description: 'Unauthorized / Token invalid or missing',
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
-          },
-        },
-      },
-    },
-    '/api/expenses': {
-      get: {
-        summary: 'Get All Expenses',
-        tags: ['Car Expenses'],
-        description: 'Retrieve all recorded car expenses sorted by date.',
-        responses: {
-          200: {
-            description: 'List of car expenses',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    success: { type: 'boolean', example: true },
-                    count: { type: 'number', example: 5 },
-                    data: {
-                      type: 'array',
-                      items: { $ref: '#/components/schemas/Expense' },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-      post: {
-        summary: 'Create New Expense',
-        tags: ['Car Expenses'],
-        description: 'Add a new expense record for fuel, maintenance, insurance, etc.',
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                required: ['title', 'amount', 'category'],
-                properties: {
-                  title: { type: 'string', example: 'Diesel Refill' },
-                  amount: { type: 'number', example: 3200 },
-                  category: { type: 'string', example: 'Fuel' },
-                  date: { type: 'string', format: 'date-time', example: '2026-09-10T10:00:00.000Z' },
-                  notes: { type: 'string', example: 'Full tank at highway' },
-                },
-              },
-            },
-          },
-        },
-        responses: {
-          201: {
-            description: 'Expense created successfully',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    success: { type: 'boolean', example: true },
-                    data: { $ref: '#/components/schemas/Expense' },
-                  },
-                },
-              },
-            },
-          },
-          400: {
-            description: 'Validation error',
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
-          },
-        },
-      },
-    },
-    '/api/expenses/{id}': {
-      get: {
-        summary: 'Get Expense by ID',
-        tags: ['Car Expenses'],
-        parameters: [
-          {
-            name: 'id',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            description: 'Expense MongoDB ID',
-            example: '663f79a31a8c9b001efc5678',
-          },
-        ],
-        responses: {
-          200: {
-            description: 'Expense details',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    success: { type: 'boolean', example: true },
-                    data: { $ref: '#/components/schemas/Expense' },
-                  },
-                },
-              },
-            },
-          },
-          404: {
-            description: 'Expense not found',
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
-          },
-        },
-      },
-      put: {
-        summary: 'Update Expense',
-        tags: ['Car Expenses'],
-        parameters: [
-          {
-            name: 'id',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            description: 'Expense MongoDB ID',
-            example: '663f79a31a8c9b001efc5678',
-          },
-        ],
-        requestBody: {
-          required: true,
-          content: {
-            'application/json': {
-              schema: {
-                type: 'object',
-                properties: {
-                  title: { type: 'string', example: 'Engine Oil Change & Service' },
-                  amount: { type: 'number', example: 4500 },
-                  category: { type: 'string', example: 'Maintenance' },
-                  date: { type: 'string', format: 'date-time' },
-                  notes: { type: 'string', example: 'Replaced air filter too' },
-                },
-              },
-            },
-          },
-        },
-        responses: {
-          200: {
-            description: 'Expense updated successfully',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    success: { type: 'boolean', example: true },
-                    data: { $ref: '#/components/schemas/Expense' },
-                  },
-                },
-              },
-            },
-          },
-          404: {
-            description: 'Expense not found',
-            content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
-          },
-        },
-      },
-      delete: {
-        summary: 'Delete Expense',
-        tags: ['Car Expenses'],
-        parameters: [
-          {
-            name: 'id',
-            in: 'path',
-            required: true,
-            schema: { type: 'string' },
-            description: 'Expense MongoDB ID',
-            example: '663f79a31a8c9b001efc5678',
-          },
-        ],
-        responses: {
-          200: {
-            description: 'Expense deleted successfully',
-            content: {
-              'application/json': {
-                schema: {
-                  type: 'object',
-                  properties: {
-                    success: { type: 'boolean', example: true },
-                    data: { type: 'object', example: {} },
-                  },
-                },
-              },
-            },
-          },
-          404: {
-            description: 'Expense not found',
             content: { 'application/json': { schema: { $ref: '#/components/schemas/ErrorResponse' } } },
           },
         },

@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import morgan from 'morgan';
 import connectDB from './config/db';
-import carExpenseRoutes from './routes/carExpenseRoutes';
 import authRoutes from './routes/authRoutes';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerDocument } from './docs/swagger';
@@ -31,13 +30,7 @@ if (process.env.NODE_ENV === 'development') {
 // Swagger API Documentation UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Health check endpoint
-app.get('/health', (req: Request, res: Response) => {
-  res.status(200).json({ status: 'ok', message: 'Car Expenses API is running (TS)' });
-});
-
 // Mounting routes
-app.use('/api/expenses', carExpenseRoutes);
 app.use('/api/auth', authRoutes);
 
 // Central error handler
