@@ -1,10 +1,14 @@
-import React from 'react';
-import { Card, Row, Col, Statistic, Table, Tag, Button, Typography } from 'antd';
-import { CompassOutlined, CheckCircleOutlined, SyncOutlined, PlusOutlined, EnvironmentOutlined } from '@ant-design/icons';
-
-const { Title, Paragraph } = Typography;
+import React, { useState, useMemo } from 'react';
+import { Tag } from 'antd';
+import { CheckCircleOutlined, SyncOutlined, EnvironmentOutlined } from '@ant-design/icons';
+import { PageHeader } from '../../components/common/PageHeader';
+import { DataTable } from '../../components/common/DataTable';
+import { FilterCard, type FilterFieldConfig } from '../../components/common/FilterCard';
 
 export const TripsPage: React.FC = () => {
+  const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
+  const [filters, setFilters] = useState<Record<string, any>>({});
+
   const sampleTrips = [
     {
       key: '1',
@@ -36,7 +40,104 @@ export const TripsPage: React.FC = () => {
       status: 'Completed',
       date: '2026-09-09',
     },
+    {
+      key: '4',
+      tripId: 'TRP-1004',
+      route: 'Velachery -> Guindy',
+      customer: 'Suresh Raina',
+      distance: '12 km',
+      fare: '₹ 320',
+      status: 'Completed',
+      date: '2026-09-08',
+    },
+    {
+      key: '5',
+      tripId: 'TRP-1005',
+      route: 'Porur -> Marina Beach',
+      customer: 'Kavitha S',
+      distance: '22 km',
+      fare: '₹ 560',
+      status: 'Ongoing',
+      date: '2026-09-08',
+    },
   ];
+
+  const filterFields: FilterFieldConfig[] = [
+    {
+      name: 'dateRange',
+      label: 'Voucher Date',
+      type: 'date-range',
+      placeholder: ['From Date', 'To Date'],
+      colSpan: { xs: 24, sm: 12, md: 6, lg: 6 },
+    },
+    {
+      name: 'tripId',
+      label: 'Voucher No',
+      type: 'text',
+      placeholder: 'Enter Voucher No',
+      colSpan: { xs: 24, sm: 12, md: 6, lg: 6 },
+    },
+    {
+      name: 'customer',
+      label: 'Ledger Name',
+      type: 'text',
+      placeholder: 'Enter Ledger Name',
+      colSpan: { xs: 24, sm: 12, md: 6, lg: 6 },
+    },
+    {
+      name: 'route',
+      label: 'Booking No',
+      type: 'text',
+      placeholder: 'Search Booking No',
+      colSpan: { xs: 24, sm: 12, md: 6, lg: 6 },
+    },
+  ];
+
+  const handleSearch = (values: Record<string, any>) => {
+    setFilters(values);
+  };
+
+  const handleClear = () => {
+    setFilters({});
+  };
+
+  const filteredTrips = useMemo(() => {
+    return sampleTrips.filter((item) => {
+      if (
+        filters.tripId &&
+        !item.tripId.toLowerCase().includes(filters.tripId.trim().toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        filters.customer &&
+        !item.customer.toLowerCase().includes(filters.customer.trim().toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        filters.route &&
+        !item.route.toLowerCase().includes(filters.route.trim().toLowerCase())
+      ) {
+        return false;
+      }
+      if (
+        filters.dateRange &&
+        Array.isArray(filters.dateRange) &&
+        filters.dateRange[0] &&
+        filters.dateRange[1]
+      ) {
+        const [start, end] = filters.dateRange;
+        const tripDate = new Date(item.date).getTime();
+        const startTime = start.startOf ? start.startOf('day').valueOf() : new Date(start).setHours(0, 0, 0, 0);
+        const endTime = end.endOf ? end.endOf('day').valueOf() : new Date(end).setHours(23, 59, 59, 999);
+        if (tripDate < startTime || tripDate > endTime) {
+          return false;
+        }
+      }
+      return true;
+    });
+  }, [filters, sampleTrips]);
 
   const columns = [
     {
@@ -94,65 +195,40 @@ export const TripsPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 fade-in">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <Title level={2} className="text-slate-800 font-extrabold m-0">
-            Trips Management
-          </Title>
-          <Paragraph className="text-slate-500 m-0">
-            Track and monitor all vehicle travel logs and trip records.
-          </Paragraph>
+    <div className="space-y-4 fade-in">
+      {/* Reusable Header with Filter Toggle and Action */}
+      <PageHeader
+        title="Trips Management"
+        description="Track and monitor all vehicle travel logs and trip records."
+        actionText="New Trip"
+        onAction={() => console.log('New trip')}
+        showFilterButton={true}
+        isFilterOpen={isFilterOpen}
+        onFilterToggle={() => setIsFilterOpen(!isFilterOpen)}
+      />
+
+      {/* Reusable Filter Card */}
+      {isFilterOpen && (
+        <div className="fade-in">
+          <FilterCard
+            fields={filterFields}
+            onSearch={handleSearch}
+            onClear={handleClear}
+            clearText="Clear"
+            searchText="Search"
+          />
         </div>
-        <Button type="primary" icon={<PlusOutlined />} className="!bg-indigo-600 !h-10 px-4 rounded-lg font-semibold">
-          New Trip
-        </Button>
-      </div>
+      )}
 
-      {/* Stats Summary */}
-      <Row gutter={[16, 16]}>
-        <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic
-              title={<span className="text-slate-400 font-medium">Total Trips</span>}
-              value={48}
-              prefix={<CompassOutlined className="text-indigo-600 mr-1.5" />}
-              valueStyle={{ color: '#4f46e5', fontWeight: 'bold' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic
-              title={<span className="text-slate-400 font-medium">Ongoing Trips</span>}
-              value={2}
-              prefix={<SyncOutlined spin className="text-blue-500 mr-1.5" />}
-              valueStyle={{ color: '#3b82f6', fontWeight: 'bold' }}
-            />
-          </Card>
-        </Col>
-        <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
-            <Statistic
-              title={<span className="text-slate-400 font-medium">Total Distance</span>}
-              value={1240}
-              suffix="km"
-              valueStyle={{ color: '#10b981', fontWeight: 'bold' }}
-            />
-          </Card>
-        </Col>
-      </Row>
-
-      {/* Recent Trips Table */}
-      <Card bordered={false} className="shadow-sm">
-        <h3 className="text-base font-bold text-slate-800 mb-4">Recent Trips</h3>
-        <Table
-          dataSource={sampleTrips}
-          columns={columns}
-          pagination={{ pageSize: 5 }}
-          className="overflow-x-auto"
-        />
-      </Card>
+      {/* Reusable Data Table with alternating row colors and styled header */}
+      <DataTable
+        cardTitle="Recent Trips"
+        dataSource={filteredTrips}
+        columns={columns}
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 };
+
+export default TripsPage;

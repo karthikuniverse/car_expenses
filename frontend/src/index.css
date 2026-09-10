@@ -20,19 +20,73 @@ html, body, #root {
 
 /* Custom premium hover and animation effects */
 .ant-btn-primary {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%) !important;
   border: none !important;
   transition: all 0.2s ease-in-out !important;
 }
 
 .ant-btn-primary:hover {
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3) !important;
   transform: translateY(-1px);
 }
 
 .ant-btn-primary:active {
   transform: translateY(1px);
 }
+
+/* Reusable Custom Data Table Styles */
+.custom-data-table .ant-table {
+  border-radius: 0 !important;
+}
+
+.custom-data-table .ant-table-container {
+  border-top: 1px solid #e2e8f0 !important;
+}
+
+.custom-data-table .ant-table-thead > tr > th {
+  background-color: #f8fafc !important; /* Crisp table header background matching image */
+  color: #1e293b !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.02em !important;
+  padding: 10px 14px !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  border-inline-end: 1px solid #e2e8f0 !important;
+}
+
+.custom-data-table .ant-table-thead > tr > th:last-child {
+  border-inline-end: none !important;
+}
+
+.custom-data-table .ant-table-tbody > tr > td {
+  padding: 10px 14px !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+  border-inline-end: 1px solid #e2e8f0 !important;
+  font-size: 0.84rem !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.custom-data-table .ant-table-tbody > tr > td:last-child {
+  border-inline-end: none !important;
+}
+
+/* Alternating Row Colors (Odd & Even) - Applied to cell level */
+.custom-data-table .ant-table-tbody > tr.table-row-even > td,
+.custom-data-table .ant-table-tbody > tr:nth-child(even) > td {
+  background-color: #ffffff !important;
+}
+
+.custom-data-table .ant-table-tbody > tr.table-row-odd > td,
+.custom-data-table .ant-table-tbody > tr:nth-child(odd) > td {
+  background-color: #f8fafc !important; /* light slate alternate stripe */
+}
+
+/* Row hover effect */
+.custom-data-table .ant-table-tbody > tr:hover > td,
+.custom-data-table .ant-table-tbody > tr.ant-table-row:hover > td {
+  background-color: #f1f5f9 !important;
+}
+
 
 /* Micro-animations */
 .fade-in {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Row, Col, Statistic, Table, Tag, Button, Typography, Avatar } from 'antd';
-import { TeamOutlined, UserOutlined, PhoneOutlined, MailOutlined, PlusOutlined, UserAddOutlined } from '@ant-design/icons';
-
-const { Title, Paragraph } = Typography;
+import { Card, Row, Col, Statistic, Tag, Avatar } from 'antd';
+import { TeamOutlined, UserOutlined, PhoneOutlined, MailOutlined, UserAddOutlined } from '@ant-design/icons';
+import { PageHeader } from '../../components/common/PageHeader';
+import { DataTable } from '../../components/common/DataTable';
 
 export const CustomersPage: React.FC = () => {
   const sampleCustomers = [
@@ -86,64 +86,56 @@ export const CustomersPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 fade-in">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <Title level={2} className="text-slate-800 font-extrabold m-0">
-            Customer Management
-          </Title>
-          <Paragraph className="text-slate-500 m-0">
-            View, add, and manage customer directories and travel histories.
-          </Paragraph>
-        </div>
-        <Button type="primary" icon={<PlusOutlined />} className="!bg-indigo-600 !h-10 px-4 rounded-lg font-semibold">
-          Add Customer
-        </Button>
-      </div>
+    <div className="space-y-4 fade-in">
+      {/* Reusable Header */}
+      <PageHeader
+        title="Customer Management"
+        description="View, add, and manage customer directories and travel histories."
+        actionText="Add Customer"
+        onAction={() => console.log('Add customer')}
+      />
 
       {/* Stats Summary */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[12, 12]}>
         <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card bordered={false} className="shadow-sm rounded-xl border border-slate-200/80 !p-2">
             <Statistic
-              title={<span className="text-slate-400 font-medium">Total Customers</span>}
+              title={<span className="text-slate-400 font-medium text-xs">Total Customers</span>}
               value={36}
-              prefix={<TeamOutlined className="text-indigo-600 mr-1.5" />}
-              valueStyle={{ color: '#4f46e5', fontWeight: 'bold' }}
+              prefix={<TeamOutlined className="text-indigo-600 mr-1.5 text-base" />}
+              valueStyle={{ color: '#4f46e5', fontWeight: 'bold', fontSize: '1.25rem' }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card bordered={false} className="shadow-sm rounded-xl border border-slate-200/80 !p-2">
             <Statistic
-              title={<span className="text-slate-400 font-medium">Corporate Accounts</span>}
+              title={<span className="text-slate-400 font-medium text-xs">Corporate Accounts</span>}
               value={8}
-              valueStyle={{ color: '#3b82f6', fontWeight: 'bold' }}
+              valueStyle={{ color: '#3b82f6', fontWeight: 'bold', fontSize: '1.25rem' }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card bordered={false} className="shadow-sm rounded-xl border border-slate-200/80 !p-2">
             <Statistic
-              title={<span className="text-slate-400 font-medium">Active Bookings</span>}
+              title={<span className="text-slate-400 font-medium text-xs">Active Bookings</span>}
               value={5}
-              prefix={<UserAddOutlined className="text-emerald-500 mr-1.5" />}
-              valueStyle={{ color: '#10b981', fontWeight: 'bold' }}
+              prefix={<UserAddOutlined className="text-emerald-500 mr-1.5 text-base" />}
+              valueStyle={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.25rem' }}
             />
           </Card>
         </Col>
       </Row>
 
-      {/* Customer List */}
-      <Card bordered={false} className="shadow-sm">
-        <h3 className="text-base font-bold text-slate-800 mb-4">Customer Directory</h3>
-        <Table
-          dataSource={sampleCustomers}
-          columns={columns}
-          pagination={{ pageSize: 5 }}
-          className="overflow-x-auto"
-        />
-      </Card>
+      {/* Reusable Customer Table */}
+      <DataTable
+        cardTitle="Customer Directory"
+        dataSource={sampleCustomers}
+        columns={columns}
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 };
+

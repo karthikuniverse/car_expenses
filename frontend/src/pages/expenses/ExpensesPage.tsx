@@ -1,8 +1,8 @@
 import React from 'react';
-import { Card, Row, Col, Statistic, Table, Tag, Button, Typography } from 'antd';
-import { DollarOutlined, ExperimentOutlined, ToolOutlined, PlusOutlined, FileTextOutlined } from '@ant-design/icons';
-
-const { Title, Paragraph } = Typography;
+import { Card, Row, Col, Statistic, Tag } from 'antd';
+import { DollarOutlined, ExperimentOutlined, ToolOutlined, FileTextOutlined } from '@ant-design/icons';
+import { PageHeader } from '../../components/common/PageHeader';
+import { DataTable } from '../../components/common/DataTable';
 
 export const ExpensesPage: React.FC = () => {
   const sampleExpenses = [
@@ -92,68 +92,60 @@ export const ExpensesPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 fade-in">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <Title level={2} className="text-slate-800 font-extrabold m-0">
-            Expenses Management
-          </Title>
-          <Paragraph className="text-slate-500 m-0">
-            Monitor, record, and track vehicle fuel, maintenance, and running costs.
-          </Paragraph>
-        </div>
-        <Button type="primary" icon={<PlusOutlined />} className="!bg-indigo-600 !h-10 px-4 rounded-lg font-semibold">
-          Add Expense
-        </Button>
-      </div>
+    <div className="space-y-4 fade-in">
+      {/* Reusable Header */}
+      <PageHeader
+        title="Expenses Management"
+        description="Monitor, record, and track vehicle fuel, maintenance, and running costs."
+        actionText="Add Expense"
+        onAction={() => console.log('Add expense')}
+      />
 
       {/* Stats Summary */}
-      <Row gutter={[16, 16]}>
+      <Row gutter={[12, 12]}>
         <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card bordered={false} className="shadow-sm rounded-xl border border-slate-200/80 !p-2">
             <Statistic
-              title={<span className="text-slate-400 font-medium">Monthly Expenses</span>}
+              title={<span className="text-slate-400 font-medium text-xs">Monthly Expenses</span>}
               value={9250}
-              prefix={<DollarOutlined className="text-indigo-600 mr-1.5" />}
+              prefix={<DollarOutlined className="text-indigo-600 mr-1.5 text-base" />}
               suffix="INR"
-              valueStyle={{ color: '#4f46e5', fontWeight: 'bold' }}
+              valueStyle={{ color: '#4f46e5', fontWeight: 'bold', fontSize: '1.25rem' }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card bordered={false} className="shadow-sm rounded-xl border border-slate-200/80 !p-2">
             <Statistic
-              title={<span className="text-slate-400 font-medium">Fuel Refill Total</span>}
+              title={<span className="text-slate-400 font-medium text-xs">Fuel Refill Total</span>}
               value={4450}
-              prefix={<ExperimentOutlined className="text-emerald-500 mr-1.5" />}
+              prefix={<ExperimentOutlined className="text-emerald-500 mr-1.5 text-base" />}
               suffix="INR"
-              valueStyle={{ color: '#10b981', fontWeight: 'bold' }}
+              valueStyle={{ color: '#10b981', fontWeight: 'bold', fontSize: '1.25rem' }}
             />
           </Card>
         </Col>
         <Col xs={24} sm={8}>
-          <Card bordered={false} className="shadow-sm">
+          <Card bordered={false} className="shadow-sm rounded-xl border border-slate-200/80 !p-2">
             <Statistic
-              title={<span className="text-slate-400 font-medium">Maintenance Cost</span>}
+              title={<span className="text-slate-400 font-medium text-xs">Maintenance Cost</span>}
               value={4200}
-              prefix={<ToolOutlined className="text-amber-500 mr-1.5" />}
+              prefix={<ToolOutlined className="text-amber-500 mr-1.5 text-base" />}
               suffix="INR"
-              valueStyle={{ color: '#f59e0b', fontWeight: 'bold' }}
+              valueStyle={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '1.25rem' }}
             />
           </Card>
         </Col>
       </Row>
 
-      {/* Expenses Table */}
-      <Card bordered={false} className="shadow-sm">
-        <h3 className="text-base font-bold text-slate-800 mb-4">Recorded Expense Items</h3>
-        <Table
-          dataSource={sampleExpenses}
-          columns={columns}
-          pagination={{ pageSize: 5 }}
-          className="overflow-x-auto"
-        />
-      </Card>
+      {/* Reusable Expenses Table */}
+      <DataTable
+        cardTitle="Recorded Expense Items"
+        dataSource={sampleExpenses}
+        columns={columns}
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 };
+
