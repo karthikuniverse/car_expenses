@@ -33,7 +33,7 @@ export const protect = async (
 
   try {
     // Verify token
-    const secret = process.env.JWT_SECRET;
+    const secret = process.env.JWT_SECRET || (process.env.NODE_ENV === 'development' ? 'car_expenses_jwt_secret_key_local_dev_2026_super_secure' : undefined);
     if (!secret) {
       throw new Error('JWT_SECRET is not defined in environment variables');
     }

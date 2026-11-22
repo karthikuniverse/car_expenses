@@ -62,6 +62,7 @@ const userSchema = new Schema<IUser>(
       createdAt: 'created_at',
       updatedAt: false,
     },
+    collection: 'users',
   }
 );
 
@@ -72,8 +73,8 @@ userSchema.methods.matchPassword = async function (password: string): Promise<bo
 
 // Sign JWT and return
 userSchema.methods.getSignedJwtToken = function (): string {
-  const secret = process.env.JWT_SECRET;
-  const expire = process.env.JWT_EXPIRE;
+  const secret = process.env.JWT_SECRET || (process.env.NODE_ENV === 'development' ? 'car_expenses_jwt_secret_key_local_dev_2026_super_secure' : undefined);
+  const expire = process.env.JWT_EXPIRE || '30d';
   if (!secret) {
     throw new Error('JWT_SECRET is not defined in environment variables');
   }
@@ -82,6 +83,6 @@ userSchema.methods.getSignedJwtToken = function (): string {
   });
 };
 
-const User = mongoose.model<IUser>('Users', userSchema);
+const User = mongoose.model<IUser>('Users', userSchema, 'users');
 
 export default User;
