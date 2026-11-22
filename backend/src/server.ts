@@ -67,6 +67,8 @@ if (process.env.NODE_ENV === 'development') {
 
 // Swagger API Documentation UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Friendly redirects so /docs or /swagger also open Swagger UI
+app.get(['/docs', '/swagger'], (_req, res) => res.redirect('/api-docs'));
 
 // Mounting routes
 app.use('/api/auth', authRoutes);
@@ -79,6 +81,7 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+  console.log(`Swagger API Docs: http://localhost:${PORT}/api-docs`);
   if (loadedEnvFile) {
     console.log(`Environment configuration loaded from: ${loadedEnvFile}`);
   }

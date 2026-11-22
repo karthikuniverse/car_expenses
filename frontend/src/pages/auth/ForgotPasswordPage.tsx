@@ -170,8 +170,8 @@ export const ForgotPasswordPage: React.FC = () => {
               prefix={<LockOutlined className="text-slate-300 mr-2" />}
               rules={[
                 { required: true, message: 'Please confirm your new password' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
+                ({ getFieldValue }: any) => ({
+                  validator(_: any, value: any) {
                     if (!value || getFieldValue('newPassword') === value) {
                       return Promise.resolve();
                     }
